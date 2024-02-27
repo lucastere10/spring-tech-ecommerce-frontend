@@ -1,9 +1,57 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Ecommerce Frontend
 
-## Getting Started
+Este projeto foi criado com o objetivo de fornecer uma interface de usuário para o backend do Spring Tech Ecommerce.
 
-First, run the development server:
+## Tecnologias Utilizadas
 
+- **Next.js 13**: Framework web baseado em React com renderização do lado do servidor.
+- **Tailwind CSS**: Framework de CSS para design de componentes.
+- **React Hook Form**: Biblioteca para gerenciamento de formulários.
+- **Yup Resolver**: Biblioteca para validação de dados.
+- **NextAuth**: Biblioteca para autenticação.
+- **i18n**: Biblioteca para internacionalização.
+- **Next-Themes**: Biblioteca para gerenciamento de temas.
+
+## Funcionalidades
+
+### Login e Registros
+
+O projeto implementa um sistema de autenticação completo, permitindo que os usuários se registrem e façam login.
+
+### Rotas Dinâmicas
+
+Rotas dinâmicas para ver detalhes do produto, permitindo uma navegação fluida e intuitiva.
+
+### CRUD com Pedido, Carrinho e Comentários
+
+Usuários podem adicionar, atualizar e remover produtos do carrinho, além de realizar pedidos e deixar comentários com nota a produtos.
+Administradores possuem CRUD completo, podendo adicionar novos produtos e mudar status de usuários, como BANIR, BLOQUEAR, ATIVAR e DESATIVAR.
+
+### Ecommerce
+
+Como um ecommerce, os usuários podem adicionar produtos ao carrinho, fazer pedidos e deixar comentários nos produtos.
+
+## Futuras Implementações
+
+- **Painel de Admin**: Um painel de administração para gerenciar o projeto.
+- **Sistema de Geração de Relatórios**: Um sistema para gerar relatórios.
+- **Sistema para Disparar Emails**: Um sistema para enviar emails.
+- **Internacionalização**: Suporte para português e inglês.
+
+## Como executar o projeto
+
+1. Clone o repositório
+2. Instale as dependências um gerenciador de pacotes de sua preferência 
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+# or
+bun install
+```
+3. Execute em ambiente de desenvolvimento
 ```bash
 npm run dev
 # or
@@ -13,24 +61,12 @@ pnpm dev
 # or
 bun dev
 ```
+4. Acesse a aplicação em `localhost:3000`
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Contribuição
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Contribuições são sempre bem-vindas. Sinta-se à vontade para abrir uma issue ou enviar um pull request.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Licença
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Este projeto está licenciado sob a licença MIT.
