@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@/providers/themeProvider";
 import NextAuthSessionProvider from '@/providers/sessionProvider';
-import { PageHeader } from "@/components/page-header";
+import { WithHeader } from "@/components/Header/WithHeader";
+import { ReduxProvider } from "@/redux/provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,15 +22,17 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <NextAuthSessionProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <PageHeader></PageHeader>
-            {children}
-          </ThemeProvider>
+          <ReduxProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <WithHeader></WithHeader>
+              {children}
+            </ThemeProvider>
+          </ReduxProvider>
         </NextAuthSessionProvider>
       </body>
     </html>
