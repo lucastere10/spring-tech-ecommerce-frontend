@@ -1,61 +1,67 @@
 import api from "@/services/api/api"
-import axios from "axios";
-import NextAuth, { NextAuthOptions } from "next-auth"
+import NextAuth, { NextAuthOptions, User } from "next-auth"
+import { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials"
+
+interface ExtendedUser extends User {
+    rememberMe?: boolean;
+}
 
 const nextAuthOptions: NextAuthOptions = {
     providers: [
         CredentialsProvider({
             name: 'credentials',
             credentials: {
-                email: { label: 'email', type: 'text' },
+                login: { label: 'login', type: 'text' },
                 senha: { label: 'senha', type: 'password' },
                 rememberMe: { label: 'rememberMe', type: 'checkbox' }
             },
 
-            async authorize(credentials, req) {
-
+            async authorize(credentials) {
                 if (!credentials) {
                     throw new Error('No credentials provided');
                 }
-                const rememberMe = credentials.rememberMe;
 
                 return api
-                    .post(`/api/auth/login`, {
-                        email: credentials?.email,
+                    .post(`/auth/login`, {
+                        login: credentials?.login,
                         senha: credentials?.senha,
                     })
                     .then((response) => {
-                        return response.data;
+                        return { ...response.data, rememberMe: credentials.rememberMe };
                     })
                     .catch((error) => {
-                        console.log(error.response);
+                        console.log("Mensagem: ", error.response.data.message);
                         throw new Error(error.response.data.message);
-                    }) || null;
+                    });
             }
+
         })
     ],
     pages: {
-        signIn: '/login'
-    },
-    session: {
-        maxAge: 24 * 60 * 60, // 1 day
+        signIn: '/login',
+        newUser: '/register',
     },
     callbacks: {
-        async jwt({ token, user }) {
+        async jwt({ token, user }: { token: JWT; user: ExtendedUser }) {
+            // verificar se user existe e adicionar ele em token.user
             user && (token.user = user)
-            return token
-        },
-        async session({ session, token }) {
-            session = token.user as any
-            const rememberMe = token?.rememberMe;
-            if (rememberMe) {
-                session.expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(); // 30 days
-            } else {
-                session.expires = new Date(Date.now() + 60 * 60 * 1000).toISOString(); // 1 hour
-            }
+            return token;
+        }
+        ,
+        async session({ session, token }: { session: any; token: any }) {
+            session = token.user
+
+            const rememberMe = session.rememberMe === 'true';
+
+            session.expires = new Date(Date.now() + (rememberMe ? 15 : 1) * 24 * 60 * 60 * 1000).toISOString()
+
+            //console.log("session: ", session)
+
             return session
         }
+
+
     }
 }
 

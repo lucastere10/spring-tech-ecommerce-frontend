@@ -10,3 +10,11 @@ interface ErrorType{
     userMessage: string;
     status: number;
 }
+
+interface UsuarioLogadoType{
+    usuarioId: number,
+    nome: string,
+    email: string,
+    usuarioTipo: string,
+    usuarioStatus: string 
+}

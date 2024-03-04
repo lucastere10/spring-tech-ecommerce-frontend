@@ -3,7 +3,15 @@ interface LoginResponse {
 }
 
 interface LoginRequest {
-    email: string;
+    login: string;
     senha: string;
-    rememberMe: boolean;
+    rememberMe?: boolean;
 };
+
+interface RegisterRequest {
+    nome: string;
+    login: string;
+    senha: string;
+    confirmarSenha: string;
+    role: string;
+}
