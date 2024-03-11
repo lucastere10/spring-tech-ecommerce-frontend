@@ -1,6 +1,6 @@
 'use client';
 import { Button } from "@/components/ui/button";
-import { ProductCard } from "@/components/ProductCard";
+import { ProductCard } from "@/components/Cards/ProductCard";
 import { useEffect, useState } from "react";
 import { fetchProductById } from "@/services/api/api";
 import ErrorComponent from "@/components/ErrorComponents";
