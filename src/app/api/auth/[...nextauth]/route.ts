@@ -1,14 +1,27 @@
-import api from "@/services/api/api"
-import NextAuth, { NextAuthOptions, User } from "next-auth"
+import api, { registerUserWithGoogleOrGithub } from "@/services/api/api"
+import { generateDummyPassword } from "@/util/dummyPassword";
+import NextAuth, { Account, NextAuthOptions, User } from "next-auth"
 import { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials"
+import GoogleProvider from "next-auth/providers/google";
+import GitHubProvider from "next-auth/providers/github";
 
 interface ExtendedUser extends User {
     rememberMe?: boolean;
+    token?: string | boolean;
 }
 
 const nextAuthOptions: NextAuthOptions = {
+    secret: process.env.AUTH_SECRET,
     providers: [
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID!,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET!
+        }),
+        GitHubProvider({
+            clientId: process.env.AUTH_GITHUB_ID!,
+            clientSecret: process.env.AUTH_GITHUB_SECRET!
+        }),
         CredentialsProvider({
             name: 'credentials',
             credentials: {
@@ -43,25 +56,48 @@ const nextAuthOptions: NextAuthOptions = {
         newUser: '/register',
     },
     callbacks: {
-        async jwt({ token, user }: { token: JWT; user: ExtendedUser }) {
+        async jwt({ token, user, account }: { token: JWT; user: ExtendedUser, account: Account | null }) {
             // verificar se user existe e adicionar ele em token.user
-            user && (token.user = user)
+            // user possui o token de autenticação e o boleano de remember
+            account && (token.account = account)
+            user && (token.token = user.token)
+            user && (token.rememberMe = user.rememberMe)
+
             return token;
         }
         ,
         async session({ session, token }: { session: any; token: any }) {
-            session = token.user
 
-            const rememberMe = session.rememberMe === 'true';
+            session.provider = token.account.provider
 
-            session.expires = new Date(Date.now() + (rememberMe ? 15 : 1) * 24 * 60 * 60 * 1000).toISOString()
+            if (['google', 'github', 'credentials'].includes(session.provider)) {
+                session.token = token.token;
+            }
 
-            //console.log("session: ", session)
+            if (session.provider === 'credentials') {
+                session.rememberMe = token.rememberMe;
+                const rememberMe = session.rememberMe === 'true';
+                session.expires = new Date(Date.now() + (rememberMe ? 15 : 1 / 24) * 24 * 60 * 60 * 1000).toISOString();
+            }
 
             return session
-        }
+        },
+        async signIn({ user, account }: { user: ExtendedUser, account: Account | null }) {
 
+            if (account?.provider === 'google' || account?.provider === 'github') {
+                const password = generateDummyPassword(user.email!)
+                const token = await registerUserWithGoogleOrGithub({
+                    login: user.email!,
+                    senha: password,
+                    nome: user.name!
+                })
 
+                // Add the token to the user object
+                user.token = token;
+            }
+
+            return true
+        },
     }
 }
 

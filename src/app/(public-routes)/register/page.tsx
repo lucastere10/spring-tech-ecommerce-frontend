@@ -7,6 +7,7 @@ import React, { useState } from "react"
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { registerUser } from "@/services/api/api";
+import RegisterLottie from "@/components/Animations/RegisterLottie";
 
 export default function Register() {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -38,8 +39,13 @@ export default function Register() {
     return (
         <div className="min-h-screentext-gray-900 flex justify-center">
             <div className="max-w-screen-xl m-0 sm:m-10 bg-white dark:bg-slate-800 shadow sm:rounded-lg flex justify-center flex-1">
-                <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
-                    <div className="mt-8 flex flex-col items-center">
+                <div className="flex-1 bg-cyan-50 dark:bg-slate-600 text-center hidden lg:flex">
+                    <div className="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat">
+                        <RegisterLottie></RegisterLottie>
+                    </div>
+                </div>
+                <div className="lg:w-1/2 xl:w-5/12 p-6 sm:px-12 sm:py-6">
+                    <div className="mt-4 flex flex-col items-center">
                         <h1 className="text-2xl xl:text-3xl font-extrabold">
                             Nova Conta
                         </h1>
@@ -155,6 +161,10 @@ export default function Register() {
                                         </span>
                                     </button>
                                 </form>
+                                <div className="flex items-center mt-5 justify-center">
+                                    <p>Já tem uma conta?</p>
+                                    <a href="/login" className="ml-2 text-md font-semibold text-primary text-primary-600 hover:underline dark:text-primary-500">Faça o Login!</a>
+                                </div>
                             </div>
 
                             <div className="my-8 border-b text-center">
@@ -201,18 +211,13 @@ export default function Register() {
                                     </span>
                                 </button>
                             </div>
-
-
                         </div>
                         <div className="flex items-center mt-8 justify-center">
                             <ThemeToggle></ThemeToggle>
                         </div>
                     </div>
                 </div>
-                <div className="flex-1 bg-cyan-50 dark:bg-slate-600 text-center hidden lg:flex">
-                    <div className="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat">
-                    </div>
-                </div>
+
             </div>
         </div>
     )

@@ -7,11 +7,14 @@ import React, { useState } from "react"
 import { getSession, signIn, useSession } from "next-auth/react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
+import LoginLottie from "@/components/Animations/LoginLottie";
+import { UserLoginSucessToast } from "@/components/Toast/UserLoginSucessToast";
 
 export default function Login() {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const router = useRouter();
     const { data: session } = useSession()
+
 
     const {
         register,
@@ -34,6 +37,31 @@ export default function Login() {
         } else {
             await getSession();
             router.replace('/')
+            UserLoginSucessToast()
+        }
+    };
+
+    const onGoogleSubmit = async () => {
+        const res = await signIn('google', {
+            redirect: false,
+        })
+
+        if (res?.error) {
+            alert(res.error)
+        } else {
+            await getSession();
+        }
+    };
+
+    const onGithubSubmit = async () => {
+        const res = await signIn('github', {
+            redirect: false,
+        })
+
+        if (res?.error) {
+            alert(res.error)
+        } else {
+            await getSession();
         }
     };
 
@@ -48,6 +76,7 @@ export default function Login() {
                         <div className="w-full flex-1 mt-8">
                             <div className="flex flex-col items-center">
                                 <button
+                                    onClick={() => { onGoogleSubmit() }}
                                     className="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-secondary text-white flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline">
                                     <div className="bg-white p-2 rounded-full">
                                         <svg className="w-4" viewBox="0 0 533.5 544.3">
@@ -71,6 +100,7 @@ export default function Login() {
                                 </button>
 
                                 <button
+                                    onClick={() => { onGithubSubmit() }}
                                     className="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-secondary text-white flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline mt-5">
                                     <div className="bg-white p-1 rounded-full">
                                         <svg className="w-6" viewBox="0 0 32 32">
@@ -105,7 +135,7 @@ export default function Login() {
                                         className="w-full px-6 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 focus:outline-none focus:border-gray-400 focus:bg-white"
                                     />
                                     {errors.login && (
-                                        <p className="text-red-500 text-sm mb-1" tabIndex={0}>
+                                        <p className="text-red-500 text-sm mb-1">
                                             {errors.login.message}
                                         </p>
                                     )}
@@ -125,7 +155,7 @@ export default function Login() {
                                         </div>
                                     </div>
                                     {errors.senha && (
-                                        <p className="text-red-500 text-sm mb-1" tabIndex={0}>
+                                        <p className="text-red-500 text-sm mb-1">
                                             {errors.senha.message}
                                         </p>
                                     )}
@@ -146,20 +176,20 @@ export default function Login() {
                                         </div>
                                         <a href="/" className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">Esqueceu a senha?</a>
                                     </div>
-                                <button
-                                    type="submit"
-                                    className="mt-5 tracking-wide font-semibold bg-primary text-gray-100 w-full py-4 rounded-lg hover:bg-secondary transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
-                                    <svg className="w-6 h-6 -ml-2" fill="none" stroke="currentColor" strokeWidth="2"
-                                        strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                                        <circle cx="8.5" cy="7" r="4" />
-                                        <path d="M20 8v6M23 11h-6" />
-                                    </svg>
-                                    <span className="ml-3">
-                                        Entrar
-                                    </span>
-                                </button>
-                                            </form>
+                                    <button
+                                        type="submit"
+                                        className="mt-5 tracking-wide font-semibold bg-primary text-gray-100 w-full py-4 rounded-lg hover:bg-secondary transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
+                                        <svg className="w-6 h-6 -ml-2" fill="none" stroke="currentColor" strokeWidth="2"
+                                            strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                                            <circle cx="8.5" cy="7" r="4" />
+                                            <path d="M20 8v6M23 11h-6" />
+                                        </svg>
+                                        <span className="ml-3">
+                                            Entrar
+                                        </span>
+                                    </button>
+                                </form>
                             </div>
                         </div>
                         <div className="flex items-center mt-5 justify-center">
@@ -173,6 +203,7 @@ export default function Login() {
                 </div>
                 <div className="flex-1 bg-cyan-50 dark:bg-slate-600 text-center hidden lg:flex">
                     <div className="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat">
+                        <LoginLottie></LoginLottie>
                     </div>
                 </div>
             </div>

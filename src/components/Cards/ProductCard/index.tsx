@@ -1,18 +1,21 @@
 "use client"
 import React, { FC } from "react"
-import { Button } from "../ui/button"
+import { Button } from "../../ui/button"
 import { FaHeart } from "react-icons/fa";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { IoStar, IoStarHalf } from "react-icons/io5";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { toast } from "sonner";
 
-export const ProductCard: FC<ProdutoCardProps> = ({produto}) => {
+export const ProductCard: FC<ProdutoCardProps> = ({ produto }) => {
     const router = useRouter()
+    const { data: session, status } = useSession()
 
     return (
         <div className="relative m-10 flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
             <button className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl" onClick={() => router.push(`/produto/${produto.produtoId}`)} >
-                <img className="object-cover" src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8c25lYWtlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"/>
+                <img className="object-cover" src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8c25lYWtlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60" />
                 <span className="absolute top-0 left-0 m-2 rounded-full bg-black px-2 text-center text-sm font-medium text-white">39% OFF</span>
             </button>
             <div className="mt-4 px-5 pb-5">
@@ -34,11 +37,28 @@ export const ProductCard: FC<ProdutoCardProps> = ({produto}) => {
                     </div>
                 </div>
                 <div className="flex gap-4">
-                    <Button className="flex items-center justify-center rounded-md px-5 py-2.5 gap-2 text-center text-sm font-medium">
+                    <Button
+                        onClick={() => {
+                            !session ? router.push('/login') : router.push('/carrinho')
+                        }}
+                        className="flex items-center justify-center rounded-md px-5 py-2.5 gap-2 text-center text-sm font-medium">
                         <MdOutlineShoppingCart size={20} />
                         Adicionar ao carrinho
                     </Button>
-                    <Button className="flex items-center justify-center bg-red-500 hover:bg-red-600 rounded-md px-3 py-1.5 text-center text-sm font-medium">
+                    <Button className="flex items-center justify-center bg-red-500 hover:bg-red-600 rounded-md px-3 py-1.5 text-center text-sm font-medium"
+                        onClick={() => {
+                            const date = new Date();
+                            const options: Intl.DateTimeFormatOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+                            const formattedDate = date.toLocaleDateString('pt-BR', options);
+                            toast("Produto adicioando ao carrinho", {
+                                description: formattedDate,
+                                action: {
+                                    label: "fechar",
+                                    onClick: () => console.log("Undo"),
+                                },
+                            })
+                        }}
+                    >
                         <FaHeart size={20} />
                     </Button>
                 </div>

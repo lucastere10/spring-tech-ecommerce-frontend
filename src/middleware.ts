@@ -5,12 +5,10 @@ const NotAuthPaths = ["/carrinho", "/usuario", "usuario/pedido"]
 
 export async function middleware(request: NextRequest) {
   if (request.cookies.has('next-auth.session-token')) {
-    console.log('COOKIE: ', request.cookies.has('next-auth.session-token'))
     if (AlreadyAuthPaths.includes(request.nextUrl.pathname)) {
       return NextResponse.redirect(new URL("/", request.url));
     }
   } else {
-    console.log('TOKEN:', request.cookies.has('next-auth.session-token'))
     if (NotAuthPaths.includes(request.nextUrl.pathname)) {
       return NextResponse.redirect(new URL("/login", request.url));
     }

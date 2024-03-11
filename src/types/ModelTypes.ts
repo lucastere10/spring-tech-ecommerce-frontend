@@ -18,3 +18,10 @@ interface UsuarioLogadoType{
     usuarioTipo: string,
     usuarioStatus: string 
 }
+
+interface CarrinhoType{
+    carrinhoId: number
+    valor: number
+    usuario: UsuarioLogadoType,
+    produtoCarrinho: ProdutoType
+}
