@@ -4,14 +4,12 @@ import { ProductCard } from "@/components/Cards/ProductCard";
 import { useEffect, useState } from "react";
 import { checkEmail, fetchProducts } from "@/services/api/api";
 import { SkeletonCard } from "@/components/Skeletons/SkeletonCard";
-import { getSession, useSession } from "next-auth/react";
 import LoginLottie from "@/components/Animations/LoginLottie";
 
 export default function Home() {
   const [produtos, setProdutos] = useState([])
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<ErrorType | null>(null);
-  const { data: session } = useSession()
 
   const handleProductSearchSubmit = async () => {
     setLoading(true);

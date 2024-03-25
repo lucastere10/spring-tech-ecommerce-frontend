@@ -124,17 +124,36 @@ export const fetchUser = async () => {
   }
 }
 
-export const getProfileInfo = async (token: any) => {
+export const fetchSecret = async () => {
   try {
-      const response = await api.get(`/auth/user`, {
-          headers: { Authorization: token }
-      });
-      return response.data;
-  } catch (err) {
-      console.error('Error fetching user data:', err);
-      return null;
+    const response = await api.get(`/auth/totp/setup`);
+    return response.data;
+  } catch (err: any) {
+    if (err.response) {
+      console.error('Error fetching data:', err.response.data);
+      return { data: null, error: err.response.data };
+    } else {
+      console.error('Error:', err.message);
+      return { data: null, error: err.message };
+    }
   }
-};
+}
+
+export const verifySecret = async (code:string) => {
+  try {
+    const response = await api.post(`/auth/totp/verify?code=${code}`);
+    console.log("Verify :", response.data)
+    return response.data;
+  } catch (err: any) {
+    if (err.response) {
+      console.error('Error fetching data:', err.response.data);
+      return { data: null, error: err.response.data };
+    } else {
+      console.error('Error:', err.message);
+      return { data: null, error: err.message };
+    }
+  }
+}
 
 export const checkEmail = async (email: string) => {
   try {
