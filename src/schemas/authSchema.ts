@@ -29,3 +29,9 @@ export const registerSchema = yup.object().shape({
         .string()
         .required('Escolha um tipo de usuário válido'),
 });
+
+export const OtpFormSchema = yup.object().shape({
+    pin: yup.string().min(6, {
+      message: "Your one-time password must be 6 characters.",
+    }),
+  })

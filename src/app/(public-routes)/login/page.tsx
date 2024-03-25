@@ -3,18 +3,20 @@ import { loginSchema } from "@/schemas/authSchema";
 import { useRouter } from "next/navigation";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { getSession, signIn, useSession } from "next-auth/react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import LoginLottie from "@/components/Animations/LoginLottie";
 import { UserLoginSucessToast } from "@/components/Toast/UserLoginSucessToast";
+import { QrCodeDialog } from "@/components/Dialogs/QrCodeDialog";
+import socket from "@/services/api/websocket";
+
+//REFERENCIAS https://tailwindflex.com/tag/login
 
 export default function Login() {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const router = useRouter();
-    const { data: session } = useSession()
-
 
     const {
         register,
@@ -68,13 +70,14 @@ export default function Login() {
     return (
         <div className="min-h-screentext-gray-900 flex justify-center">
             <div className="max-w-screen-xl m-0 sm:m-10 bg-white dark:bg-slate-800 shadow sm:rounded-lg flex justify-center flex-1">
-                <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
-                    <div className="mt-12 flex flex-col items-center">
+                <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-8">
+                    <div className="mt-6 flex flex-col items-center">
                         <h1 className="text-2xl xl:text-3xl font-extrabold">
                             Bem Vindo!
                         </h1>
                         <div className="w-full flex-1 mt-8">
                             <div className="flex flex-col items-center">
+                                
                                 <button
                                     onClick={() => { onGoogleSubmit() }}
                                     className="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-secondary text-white flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline">
@@ -112,8 +115,10 @@ export default function Login() {
                                         Entrar com o GitHub
                                     </span>
                                 </button>
-                            </div>
 
+                                <QrCodeDialog />
+
+                            </div>
                             <div className="my-12 border-b text-center">
                                 <div
                                     className="leading-none px-2 inline-block text-sm tracking-wide font-medium bg-white dark:bg-slate-800 transform translate-y-1/2">
